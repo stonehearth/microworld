@@ -1,0 +1,12 @@
+{
+   "info" :{
+      "name" : "Microworld",
+      "version" : 1
+   },
+
+   "server_init_script" : "file(microworld)",
+
+   "ui" :  {
+      "homepage" : "http://radiant/stonehearth/ui/root/index.html?skip_title=true"
+   }
+}
