@@ -113,10 +113,15 @@ function DataDriven:start()
    
    -- workers (Array)
    -- Each worker definition may have the following properties:
-   --    `x` (number, required): x-position of the worker
-   --    `z` (number, required): z-position of the worker
-   --    `carrying` (string; optional): entity reference that the worker will carry
-   --    `job` (string, optional): job that the worker is immediately promoted to
+   --  \ `x` (number, required): x-position of the worker
+   --  | `z` (number, required): z-position of the worker
+   --  | `carrying` (string; optional): alias/entity reference that the worker will carry
+   --  | `job` (string, optional): job that the worker is immediately promoted to
+   --  | 
+   --  |\ `workshop` (table, optional): If set, a workshop for this worker is spawned too.
+   --  | | `entity_ref` (string, required): alias/entity reference of the workshop
+   --  | | `x` (number, required): x-position of the workshop
+   --  | | `z` (number, required): z-position of the workshop
    local workers = self:_get_config('workers', {})
    for _, worker_def in pairs(workers) do
       local x, z = worker_def.x, worker_def.z
@@ -130,6 +135,28 @@ function DataDriven:start()
          is_string(worker_def.carrying)
          local item = pop:create_entity(worker_def.carrying)
          radiant.entities.pickup_item(worker, item)
+      end
+      
+      if worker_def.workshop then
+         if not worker_def.job then
+            error('worker cannot have a workshop without a profession!')
+         end
+         
+         local workshop_def = worker_def.workshop
+         
+         local entity_ref, x, z = workshop_def.entity_ref, workshop_def.x, workshop_def.z
+         
+         is_string(entity_ref)
+         is_number(x)
+         is_number(z)
+         
+         local crafter_component = worker:get_component('stonehearth:crafter')
+         assert(crafter_component, 'no crafter component found on worker')
+         local workshop = microworld:place_entity(entity_ref, x, z, { full_size = true, owner = player_id })
+         local workshop_component = workshop:get_component('stonehearth:workshop')
+         assert(workshop_component, 'no workshop component found on workshop')
+         crafter_component:set_workshop(workshop_component)
+         workshop_component:set_crafter(worker)
       end
    end
    
