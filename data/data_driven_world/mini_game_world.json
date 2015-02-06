@@ -1,0 +1,98 @@
+{
+   "world" : {
+      "size" : 64,
+      "town_position" : { "x": 0, "z": 0 }
+   },
+   
+   "entities" : [
+      {
+         "entity_ref" : "stonehearth:decoration:firepit",
+         "x" : 0,
+         "z" : 11,
+         "requires_owner": true,
+         "full_size" : true
+      },
+      
+      {
+         "entity_ref" : "stonehearth:berry_bush",
+         "x" : 4,
+         "z" : 2,
+         
+         "repeat_x" : 4,
+         "repeat_z" : 2,
+         
+         "offset_x" : 4,
+         "offset_z" : 4
+      },
+      
+      {
+         "entity_ref" : "stonehearth:large_oak_tree",
+         "x": -12,
+         "z" : -12
+      },
+      
+      {
+         "entity_ref" : "stonehearth:medium_oak_tree",
+         "x" : 14,
+         "z" : -13
+      },
+      
+      {
+         "entity_ref" : "stonehearth:medium_oak_tree",
+         "x" : 11,
+         "z" : 16
+      },
+      
+      {
+         "entity_ref" : "stonehearth:small_oak_tree",
+         "x" : -10,
+         "z" : 15
+      },
+      
+      {
+         "entity_ref" : "stonehearth:red_fox",
+         "x" : 2,
+         "z" : 2
+      }
+   ],
+         
+   "workers": [
+      {
+         "x" : -2,
+         "z" : -2
+      },
+      
+      {
+         "x" : -2,
+         "z" : 1,
+         
+         "carrying" : "stonehearth:resources:fiber:silkweed_bundle"
+      },
+      
+      {
+         "x" : 1,
+         "z" : -2,
+         
+         "carrying" : "stonehearth:trapper:talisman"
+      },
+      
+      {
+         "x" : 1,
+         "z" : 1,
+         
+         "carrying" : "stonehearth:carpenter:talisman"
+      },
+      
+      {
+         "x" : 4,
+         "z" : -2
+      },
+      
+      {
+         "x" : 4,
+         "z" : 1,
+         
+         "carrying" : "stonehearth:resources:wood:oak_log"
+      }
+   ]
+}

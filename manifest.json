@@ -5,7 +5,12 @@
    },
 
    "server_init_script" : "file(microworld)",
-
+   
+   "aliases" : {
+      "data_driven:world:mini_game" : "file(data/data_driven_world/mini_game_world.json)",
+      "data_driven:world_harvest_test" : "file(data/data_driven_world/harvest_test_world.json)"
+   },
+   
    "ui" :  {
       "homepage" : "http://radiant/stonehearth/ui/root/index.html?skip_title=true"
    }

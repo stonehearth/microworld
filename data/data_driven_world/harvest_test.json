@@ -1,0 +1,116 @@
+{
+   "world" : {
+      "size" : 64
+   },
+   
+   "entities" : [
+      {
+         "entity_ref" : "stonehearth:large_oak_tree",
+         "x" : -25,
+         "z": -25
+      },
+      
+      {
+         "entity_ref" : "stonehearth:medium_oak_tree",
+         "x": -5,
+         "z": -25
+      },
+      
+      {
+         "entity_ref" : "stonehearth:small_oak_tree",
+         "x" : 15,
+         "z" : -25
+      },
+      
+      {
+         "entity_ref" : "stonehearth:large_juniper_tree",
+         "x" : -25,
+         "z" : -5
+      },
+      
+      {
+         "entity_ref" : "stonehearth:medium_juniper_tree",
+         "x" : -5,
+         "z": -5
+      },
+      
+      {
+         "entity_ref" : "stonehearth:small_juniper_tree",
+         "x" : 15,
+         "z" : -5
+      },
+      
+      {
+         "entity_ref" : "stonehearth:large_boulder_1",
+         "x" : -25,
+         "z" : 5
+      },
+      
+      {
+         "entity_ref" : "stonehearth:medium_boulder_1",
+         "x" : -15,
+         "z" : 5
+      },
+      
+      {
+         "entity_ref" : "stonehearth:small_boulder",
+         "x" : -5,
+         "z" : 5
+      },
+      
+      {
+         "entity_ref" : "stonehearth:small_boulder",
+         "x" : 5,
+         "z" : 5,
+         
+         "rotation" : 90
+      },
+      
+      {
+         "entity_ref" : "stonehearth:small_boulder",
+         "x" : 15,
+         "z" : 5,
+         
+         "rotation" : 90
+      },
+      
+      {
+         "entity_ref" : "stonehearth:berry_bush",
+         "x" : -25,
+         "z" : 15
+      },
+      
+      {
+         "entity_ref" : "stonehearth:berry_bush",
+         "x" : -15,
+         "z" : 15
+      },
+      
+      {
+         "entity_ref" : "stonehearth:plants:silkweed",
+         "x" : -5,
+         "z" : 15
+      }
+   ],
+         
+   "workers": [
+      {
+         "x" : 12,
+         "z" : 12
+      },
+      
+      {
+         "x" : 14,
+         "z" : 14
+      }
+   ],
+   
+   "stockpiles" : [
+      {
+         "x" : 12,
+         "z" : 12,
+         "width" : 4,
+         "height" : 4
+      }
+   ]
+}
