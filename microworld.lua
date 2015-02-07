@@ -20,17 +20,47 @@ function MicroWorld:create_world(size)
 
    -- create a trivial terrain.  just a flat, square world with bedrock, soil, and
    -- grass.
-   local half_size = size / 2
-   local block_types = radiant.terrain.get_block_types()
+   self:create_terrain({ base = Point3(0, -2, 0), dimension = Point3(size, 2, size) }, 'bedrock')
+   self:create_terrain({ base = Point3(0, 0, 0), dimension = Point3(size, 9, size) }, 'soil_dark')
+   self:create_terrain({ base = Point3(0, 9, 0), dimension = Point3(size, 1, size) }, 'grass')
+end
 
+-- creates a new block.
+-- `coordinates`is a table either containing two Point3 called
+--    - `min` and `max` if you wish to define it in a min/max coordinate style
+--    - `center` and `dimension` if you wish to have a centered block
+--    - `base` and `dimension` if you wish to have a centered block on top of `base`
+-- `block_type` is the name of the block type to be created 
+--              (as pulled from `radiant.terrain.get_block_types()`)
+function MicroWorld:create_terrain(coordinates, block_type)
    local region3 = Region3()
-   region3:add_cube(Cube3(Point3(0, -2, 0), Point3(size, 0,  size), block_types.bedrock))
-   region3:add_cube(Cube3(Point3(0,  0, 0), Point3(size, 9,  size), block_types.soil_dark))
-   region3:add_cube(Cube3(Point3(0,  9, 0), Point3(size, 10, size), block_types.grass))
-   region3 = region3:translated(Point3(-half_size, 0, -half_size))
-
-   radiant._root_entity:add_component('terrain')
-                           :add_tile(region3)
+   local min, max
+   
+   -- does coordinates contain min/max?
+   if coordinates.min ~= nil and coordinates.max ~= nil then
+      min, max = coordinates.min, coordinates.max
+   elseif coordinates.center ~= nil and coordinates.dimension ~= nil then
+      min = coordinates.center - coordinates.dimension / 2
+      max = coordinates.center + coordinates.dimension / 2
+   elseif coordinates.base ~= nil and coordinates.dimension ~= nil then
+      min = Point3(
+               coordinates.base.x - coordinates.dimension.x / 2,
+               coordinates.base.y,
+               coordinates.base.z - coordinates.dimension.z / 2
+            )
+      max = Point3(
+               coordinates.base.x + coordinates.dimension.x / 2,
+               coordinates.base.y + coordinates.dimension.y,
+               coordinates.base.z + coordinates.dimension.z / 2
+            )
+   else
+      error('cannot determine coordinates of block (invalid coordinates passed)')
+   end
+   
+   local block_types = radiant.terrain.get_block_types()
+   region3:add_cube(Cube3(min, max, block_types[block_type]))
+   
+   radiant._root_entity:add_component('terrain'):add_tile(region3)
 end
 
 -- get the player_id of the local player.
