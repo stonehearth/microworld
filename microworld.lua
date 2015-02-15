@@ -39,20 +39,25 @@ function MicroWorld:create_terrain(coordinates, block_type)
    -- does coordinates contain min/max?
    if coordinates.min ~= nil and coordinates.max ~= nil then
       min, max = coordinates.min, coordinates.max
-   elseif coordinates.center ~= nil and coordinates.dimension ~= nil then
-      min = coordinates.center - coordinates.dimension / 2
-      max = coordinates.center + coordinates.dimension / 2
-   elseif coordinates.base ~= nil and coordinates.dimension ~= nil then
-      min = Point3(
-               coordinates.base.x - coordinates.dimension.x / 2,
-               coordinates.base.y,
-               coordinates.base.z - coordinates.dimension.z / 2
-            )
-      max = Point3(
-               coordinates.base.x + coordinates.dimension.x / 2,
-               coordinates.base.y + coordinates.dimension.y,
-               coordinates.base.z + coordinates.dimension.z / 2
-            )
+   elseif coordinates.dimension ~= nil then
+      local dimension_half = coordinates.dimension / 2
+      if coordinates.center ~= nil then
+         min = coordinates.center - Point3(math.floor(coordinates_half.x), math.floor(coordinates_half.y), math.floor(coordinates_half.z))
+         max = coordinates.center + Point3(math.ceil(coordinates_half.x), math.ceil(coordinates_half.y), math.ceil(coordinates_half.z))
+      elseif coordinates.base ~= nil then
+         min = Point3(
+                  coordinates.base.x - math.floor(coordinates.dimension.x / 2),
+                  coordinates.base.y,
+                  coordinates.base.z - math.floor(coordinates.dimension.z / 2)
+               )
+         max = Point3(
+                  coordinates.base.x + math.ceil(coordinates.dimension.x / 2),
+                  coordinates.base.y + coordinates.dimension.y,
+                  coordinates.base.z + math.ceil(coordinates.dimension.z / 2)
+               )
+      else
+         error('cannot determine coordinates of block (invalid coordinates passed)')
+      end
    else
       error('cannot determine coordinates of block (invalid coordinates passed)')
    end
