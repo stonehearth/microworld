@@ -10,7 +10,6 @@
          "job" : "stonehearth:jobs:carpenter",
          
          "workshop" : {
-            "entity_ref" : "stonehearth:carpenter:workbench",
             "x" : -5,
             "z" : -10
          }
@@ -22,7 +21,6 @@
          "job" : "stonehearth:jobs:mason",
          
          "workshop" : {
-            "entity_ref" : "stonehearth:mason:workbench",
             "x" : -5,
             "z" : -5
          }
@@ -34,7 +32,6 @@
          "job" : "stonehearth:jobs:blacksmith",
          
          "workshop" : {
-            "entity_ref" : "stonehearth:blacksmith:workbench",
             "x" : -5,
             "z" : 0
          }
@@ -46,7 +43,6 @@
          "job" : "stonehearth:jobs:weaver",
          
          "workshop" : {
-            "entity_ref" : "stonehearth:weaver:workbench",
             "x" : -5,
             "z" : 5
          }

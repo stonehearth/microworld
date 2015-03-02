@@ -142,21 +142,12 @@ function DataDriven:start()
             error('worker cannot have a workshop without a profession!')
          end
          
-         local workshop_def = worker_def.workshop
+         local x, z = worker_def.workshop.x, worker_def.workshop.z
          
-         local entity_ref, x, z = workshop_def.entity_ref, workshop_def.x, workshop_def.z
-         
-         is_string(entity_ref)
          is_number(x)
          is_number(z)
          
-         local crafter_component = worker:get_component('stonehearth:crafter')
-         assert(crafter_component, 'no crafter component found on worker')
-         local workshop = microworld:place_entity(entity_ref, x, z, { full_size = true, owner = player_id })
-         local workshop_component = workshop:get_component('stonehearth:workshop')
-         assert(workshop_component, 'no workshop component found on workshop')
-         crafter_component:set_workshop(workshop_component)
-         workshop_component:set_crafter(worker)
+         microworld:create_workbench(worker, x, z)
       end
    end
    
