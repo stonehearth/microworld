@@ -65,6 +65,10 @@ function DataDriven:start()
    --    `repeat_z` (number, optional): if set, the entity will be spawned `repeat_z`-times along the z-axis. Default 1.
    --    `offset_x` (number, optional): if `repeat_x` is greater than 1, each entity is spawned `offset_x` away from the last one. Default 1.
    --    `offset_x` (number, optional): if `repeat_x` is greater than 1, each entity is spawned `offset_x` away from the last one. Default 1.
+   --
+   --    Optionally, the entity may also have an array that contains items that will be equipped to the spawned entity.
+   --    this only makes sense for NPCs.
+   --    `equipment` (table, optional): if set, the entity will be equipped with each of the elements inside the array
    local entities = self:_get_config('entities', {})
    for _, entity_def in pairs(entities) do
       if type(entity_def) ~= 'table' then
@@ -98,6 +102,8 @@ function DataDriven:start()
          full_size = full_size
       }
       
+      local equipment = entity_def.equipment or {}
+      
       -- We could use `microworld.place_entity_cluster` here, but will not do so as it
       -- does currently not support set spaces between entities.
       for x_inc = 0, repeat_x - 1 do
@@ -106,6 +112,10 @@ function DataDriven:start()
             
             if rotation then
                entity:add_component('mob'):turn_to(rotation)
+            end
+            
+            for _, equip_ref in pairs(equipment) do
+               radiant.entities.equip_item(entity, equip_ref)
             end
          end
       end
@@ -119,9 +129,10 @@ function DataDriven:start()
    --  | `job` (string, optional): job that the worker is immediately promoted to
    --  | 
    --  |\ `workshop` (table, optional): If set, a workshop for this worker is spawned too.
-   --  | | `entity_ref` (string, required): alias/entity reference of the workshop
    --  | | `x` (number, required): x-position of the workshop
    --  | | `z` (number, required): z-position of the workshop
+   --  |
+   --  | `equipment` (table, optional): Items that will be equipped to this worker
    local workers = self:_get_config('workers', {})
    for _, worker_def in pairs(workers) do
       local x, z = worker_def.x, worker_def.z
@@ -148,6 +159,13 @@ function DataDriven:start()
          is_number(z)
          
          microworld:create_workbench(worker, x, z)
+      end
+      
+      -- 
+      if worker_def.equipment then
+         for _, entity_ref in pairs(worker_def.equipment) do
+            radiant.entities.equip_item(worker, entity_ref)
+         end
       end
    end
    
