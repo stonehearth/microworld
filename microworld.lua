@@ -148,6 +148,37 @@ function MicroWorld:place_citizen(x, z, job)
    return citizen
 end
 
+-- creates a workbench for `citizen` at (`x`/`z`)
+function MicroWorld:create_workbench(citizen, x, z)
+   -- Get the job component
+   local job_component = citizen:get_component('stonehearth:job')
+   if not job_component then
+      error('citizen has no stonehearth:job component! (did you forget the promotion?)', 2)
+   end
+   
+   -- Get the crafter component
+   local crafter_component = citizen:get_component('stonehearth:crafter')
+   if not crafter_component then
+      error('citizen has no stonehearth:crafter component!', 2)
+   end
+   
+   -- Create the workshop, pulling the entity ref from the job's definition
+   local job_definition = radiant.resources.load_json(job_component:get_job_uri())
+   local workbench = self:place_entity(job_definition.workshop.workbench_type, x, z, { full_size = true, owner = self:get_local_player_id() })
+   
+   -- Link worker and crafter together
+   local workshop_component = workbench:get_component('stonehearth:workshop')
+   
+   if not workshop_component then
+      error('workbench has no stonehearth:workshop component!', 2)
+   end
+   
+   crafter_component:set_workshop(workshop_component)
+   workshop_component:set_crafter(citizen)
+   
+   return workbench
+end
+
 -- place a stockpile for the local player at `x`, `z`
 function MicroWorld:place_stockpile(x, z, w, h)
    w = w and w or 3
