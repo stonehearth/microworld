@@ -40,7 +40,17 @@ end
 function DataDriven:start()
    -- World creation
    microworld:create_world(self:_get_config('world.size', 64))
-
+   
+   -- Create additional terrain, if requested.
+   -- `world.terrain` (Array) contains objects which are passed directly to `MicroWorld:create_terrain` 
+   -- in terms of coordinates. The key `block_type` is used to determine what kind of block it creates.
+   -- For more information on how this can be used, see `MicroWorld:create_terrain` or the example
+   -- world (microworld:data_driven:world:terrain_test)
+   for _, terrain in pairs(self:_get_config('world.terrain', {})) do
+      is_string(terrain.block_type)
+      microworld:create_terrain(terrain, terrain.block_type)
+   end
+   
    local player_id = microworld:get_local_player_id()
    local pop = stonehearth.population:get_population(player_id)
 

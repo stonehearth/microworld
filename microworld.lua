@@ -26,7 +26,7 @@ function MicroWorld:create_world(size)
 end
 
 -- creates a new block.
--- `coordinates`is a table either containing two Point3 called
+-- `coordinates`is a table either containing two Point3 (or tables with x/y/z members) called
 --    - `min` and `max` if you wish to define it in a min/max coordinate style
 --    - `center` and `dimension` if you wish to have a centered block
 --    - `base` and `dimension` if you wish to have a centered block on top of `base`
@@ -36,14 +36,21 @@ function MicroWorld:create_terrain(coordinates, block_type)
    local region3 = Region3()
    local min, max
    
+   -- Make sure that all the coordinates are Point3s
+   for k, v in pairs(coordinates) do
+      if not radiant.util.is_a(v, Point3) and radiant.util.is_a(v, 'table') then
+         coordinates[k] = Point3(v.x, v.y, v.z)
+      end
+   end
+   
    -- does coordinates contain min/max?
    if coordinates.min ~= nil and coordinates.max ~= nil then
       min, max = coordinates.min, coordinates.max
    elseif coordinates.dimension ~= nil then
       local dimension_half = coordinates.dimension / 2
       if coordinates.center ~= nil then
-         min = coordinates.center - Point3(math.floor(coordinates_half.x), math.floor(coordinates_half.y), math.floor(coordinates_half.z))
-         max = coordinates.center + Point3(math.ceil(coordinates_half.x), math.ceil(coordinates_half.y), math.ceil(coordinates_half.z))
+         min = coordinates.center - Point3(math.floor(dimension_half.x), math.floor(dimension_half.y), math.floor(dimension_half.z))
+         max = coordinates.center + Point3(math.ceil(dimension_half.x), math.ceil(dimension_half.y), math.ceil(dimension_half.z))
       elseif coordinates.base ~= nil then
          min = Point3(
                   coordinates.base.x - math.floor(coordinates.dimension.x / 2),
@@ -61,7 +68,7 @@ function MicroWorld:create_terrain(coordinates, block_type)
    else
       error('cannot determine coordinates of block (invalid coordinates passed)')
    end
-   
+
    local block_types = radiant.terrain.get_block_types()
    region3:add_cube(Cube3(min, max, block_types[block_type]))
    
