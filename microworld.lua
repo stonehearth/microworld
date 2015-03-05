@@ -79,13 +79,8 @@ end
 --    owner (string): the player_id of the owner of the object
 --
 function MicroWorld:create_entity(alias, options)
-   local entity = radiant.entities.create_entity(alias)
-   if options then
-      if options.owner then
-         entity:add_component('unit_info')
-                  :set_player_id(options.owner)
-      end
-   end
+   local entity = radiant.entities.create_entity(alias, options)
+   
    return entity
 end
 
