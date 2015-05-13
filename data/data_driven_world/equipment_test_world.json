@@ -3,10 +3,12 @@
       "size" : 64
    },
    
-   "workers" : [
+   "citizens" : [
       {
-         "x" : -2,
-         "z" : -2,
+         "position" : {
+            "x" : -2,
+            "z" : -2
+         },
          
          "job" : "stonehearth:jobs:footman",
          
@@ -18,8 +20,10 @@
       },
       
       {
-         "x" : 2,
-         "z" : 2,
+         "position" : {
+            "x" : 2,
+            "z" : 2
+         },
          
          "equipment" : [
             "stonehearth:worker:outfit:2"
@@ -27,17 +31,24 @@
       },
       
       {
-         "x" : -2,
-         "z" : 2
+         "position" : {
+            "x" : -2,
+            "z" : 2
+         }
       }
    ],
    
    "stockpiles" : [
       {
-         "x" : -2,
-         "z" : -2,
-         "width": 4,
-         "height" : 4
+         "position" : {
+            "x" : -2,
+            "z" : -2
+         },
+         
+         "dimension" : {
+            "width": 4,
+            "height" : 4
+         }
       }
    ]
 }

@@ -62,39 +62,44 @@ function DataDriven:start()
    
    -- entities (Array)
    -- Each entity may have the following properties:
-   --    `entity_ref` (string, required): alias/entity reference of the entity
-   --    `x` (number, required): x-position of the entity
-   --    `z` (number, required): z-position of the entity
-   -- 
-   --    `requires_owner` (boolean, optional): If set, this entity will have its owner set. Required for stonehearth:decoration:firepit. Default false.
-   --    `full_size` (boolean, optional): If set to `true` it will spawn a "real" entity, if set to `false` it spawns an iconic version. Default false.
-   --    `rotation` (number, optional): If set, the entity will be rotated by `rotation` degrees. Default 0.
-   --
-   --    It's possible to create clusters using the following properties:
-   --    `repeat_x` (number, optional): if set, the entity will be spawned `repeat_x`-times along the x-axis. Default 1.
-   --    `repeat_z` (number, optional): if set, the entity will be spawned `repeat_z`-times along the z-axis. Default 1.
-   --    `offset_x` (number, optional): if `repeat_x` is greater than 1, each entity is spawned `offset_x` away from the last one. Default 1.
-   --    `offset_x` (number, optional): if `repeat_x` is greater than 1, each entity is spawned `offset_x` away from the last one. Default 1.
-   --
-   --    Optionally, the entity may also have an array that contains items that will be equipped to the spawned entity.
-   --    this only makes sense for NPCs.
-   --    `equipment` (table, optional): if set, the entity will be equipped with each of the elements inside the array
+   --  | `alias` (string, required): alias/entity reference of the entity
+   --  |\  `position` (table, required): position of the entity
+   --  | | `x` (number, required): x-position of the entity
+   --  | | `z` (number, required): z-position of the entity
+   --  |
+   --  | `requires_owner` (boolean, optional): If set, this entity will have its owner set. Required for stonehearth:decoration:firepit. Default false.
+   --  | `full_size` (boolean, optional): If set to `true` it will spawn a "real" entity, if set to `false` it spawns an iconic version. Default false.
+   --  | `rotation` (number, optional): If set, the entity will be rotated by `rotation` degrees. Default 0.
+   --  |
+   --  |\  `repeat` (table, optional): if set, the entity will be spawned multiple times. This can be used to create clusters.
+   --  | | `x` (number, optional): if set, the entity will be spawned `x`-times along the x-axis. Default 1.
+   --  | | `z` (number, optional): if set, the entity will be spawned `z`-times along the z-axis. Default 1.
+   --  |
+   --  |\  `offset` (table, optional): deals with offset of clusters. Only effective if `repeat` was set.
+   --  | | `x` (number, optional): if `repeat_x` is greater than 1, each entity is spawned `offset_x` away from the last one. Default 1.
+   --  | | `y` (number, optional): if `repeat_x` is greater than 1, each entity is spawned `offset_x` away from the last one. Default 1.
+   --  |
+   --  | `equipment` (table, optional): if set, the entity will be equipped with each of the elements inside the array
    local entities = self:_get_config('entities', {})
    for _, entity_def in pairs(entities) do
       if type(entity_def) ~= 'table' then
          error('invalid entities-entry! Expected table, got ' .. type(entity_def))
       end
       
-      local entity_ref, x, z = entity_def.entity_ref, entity_def.x, entity_def.z
+      local alias, position = entity_def.alias, entity_def.position
+      
+      is_table(position)
+      
+      local x, z = position.x, position.z
       
       -- Validation of these parameters, as they're horribly important and cannot default
-      is_string(entity_ref)
+      is_string(alias)
       is_number(x)
       is_number(z)
       
       -- To create "fields" of entities easily, repeat_x and repeat_z can be set to higher values
-      local repeat_x, repeat_z = _get_value(entity_def, 'repeat_x', 1), _get_value(entity_def, 'repeat_z', 1)
-      local offset_x, offset_z = _get_value(entity_def, 'offset_x', 1), _get_value(entity_def, 'offset_z', 1)
+      local repeat_x, repeat_z = _get_value(entity_def, 'repeat.x', 1), _get_value(entity_def, 'repeat.z', 1)
+      local offset_x, offset_z = _get_value(entity_def, 'offset.x', 1), _get_value(entity_def, 'offset.z', 1)
       
       -- Whether the owner-field needs to be set; this is currently required for the firepit and might
       -- be required for other player-created fields
@@ -118,7 +123,7 @@ function DataDriven:start()
       -- does currently not support set spaces between entities.
       for x_inc = 0, repeat_x - 1 do
          for z_inc = 0, repeat_z - 1 do
-            local entity = microworld:place_entity(entity_ref, x + x_inc * offset_x, z + z_inc * offset_z, final_data)
+            local entity = microworld:place_entity(alias, x + x_inc * offset_x, z + z_inc * offset_z, final_data)
             
             if rotation then
                entity:add_component('mob'):turn_to(rotation)
@@ -131,10 +136,13 @@ function DataDriven:start()
       end
    end
    
-   -- workers (Array)
-   -- Each worker definition may have the following properties:
-   --  \ `x` (number, required): x-position of the worker
-   --  | `z` (number, required): z-position of the worker
+   -- citizens (Array)
+   -- Each citizen definition may have the following properties:
+   --  \ 
+   --  |\ `position` (table, required): The location of the citizen
+   --  | | `x` (number, required): x-position of the worker
+   --  | | `z` (number, required): z-position of the worker
+   --  |
    --  | `carrying` (string; optional): alias/entity reference that the worker will carry
    --  | `job` (string, optional): job that the worker is immediately promoted to
    --  | 
@@ -143,27 +151,31 @@ function DataDriven:start()
    --  | | `z` (number, required): z-position of the workshop
    --  |
    --  | `equipment` (table, optional): Items that will be equipped to this worker
-   local workers = self:_get_config('workers', {})
-   for _, worker_def in pairs(workers) do
-      local x, z = worker_def.x, worker_def.z
+   local citizens = self:_get_config('citizens', {})
+   for _, citizen_def in pairs(citizens) do
+      is_table(citizen_def.position)
+      
+      local x, z = citizen_def.position.x, citizen_def.position.z
       
       is_number(x)
       is_number(z)
       
-      local worker = microworld:place_citizen(x, z, worker_def.job)
+      local worker = microworld:place_citizen(x, z, citizen_def.job)
       
-      if worker_def.carrying then
-         is_string(worker_def.carrying)
-         local item = pop:create_entity(worker_def.carrying)
+      if citizen_def.carrying then
+         is_string(citizen_def.carrying)
+         local item = pop:create_entity(citizen_def.carrying)
          radiant.entities.pickup_item(worker, item)
       end
       
-      if worker_def.workshop then
-         if not worker_def.job then
+      if citizen_def.workshop then
+         if not citizen_def.job then
             error('worker cannot have a workshop without a profession!')
          end
          
-         local x, z = worker_def.workshop.x, worker_def.workshop.z
+         is_table(citizen_def.workshop.position)
+         
+         local x, z = citizen_def.workshop.position.x, citizen_def.workshop.position.z
          
          is_number(x)
          is_number(z)
@@ -172,22 +184,28 @@ function DataDriven:start()
       end
       
       -- 
-      if worker_def.equipment then
-         for _, entity_ref in pairs(worker_def.equipment) do
-            radiant.entities.equip_item(worker, entity_ref)
+      if citizen_def.equipment then
+         for _, alias in pairs(citizen_def.equipment) do
+            radiant.entities.equip_item(worker, alias)
          end
       end
    end
    
    -- stockpiles (Array)
    -- Each stockpile definition may have the following properties:
-   --    `x` (number, required): x of the stockpile
-   --    `z` (number, required): z of the stockpile
-   --    `width` (number, required): width of the stockpile
-   --    `height` (number, required): height of the stockpile
+   --  |\  `position` (table, required): position of the stockpile
+   --  | | `x` (number, required): x of the stockpile
+   --  | | `z` (number, required): z of the stockpile
+   --  |
+   --  |\  `dimension` (table, required): dimension of the stockpile
+   --  | | `width` (number, required): width of the stockpile
+   --  | | `height` (number, required): height of the stockpile
    local stockpiles = self:_get_config('stockpiles', {})
    for _, stockpile_def in pairs(stockpiles) do
-      local x, z, width, height = stockpile_def.x, stockpile_def.z, stockpile_def.width, stockpile_def.height
+      is_table(stockpile_def.position)
+      is_table(stockpile_def.dimension)
+      
+      local x, z, width, height = stockpile_def.position.x, stockpile_def.position.z, stockpile_def.dimension.width, stockpile_def.dimension.height
       
       is_number(x)
       is_number(z)
