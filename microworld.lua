@@ -53,14 +53,14 @@ function MicroWorld:create_terrain(coordinates, block_type)
          max = coordinates.center + Point3(math.ceil(dimension_half.x), math.ceil(dimension_half.y), math.ceil(dimension_half.z))
       elseif coordinates.base ~= nil then
          min = Point3(
-                  coordinates.base.x - math.floor(coordinates.dimension.x / 2),
+                  coordinates.base.x - math.floor(dimension_half.x),
                   coordinates.base.y,
-                  coordinates.base.z - math.floor(coordinates.dimension.z / 2)
+                  coordinates.base.z - math.floor(dimension_half.z)
                )
          max = Point3(
-                  coordinates.base.x + math.ceil(coordinates.dimension.x / 2),
+                  coordinates.base.x + math.ceil(dimension_half.x),
                   coordinates.base.y + coordinates.dimension.y,
-                  coordinates.base.z + math.ceil(coordinates.dimension.z / 2)
+                  coordinates.base.z + math.ceil(dimension_half.z)
                )
       else
          error('cannot determine coordinates of block (invalid coordinates passed)')
