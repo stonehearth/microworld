@@ -1,0 +1,71 @@
+{
+   "world" : {
+      "size" : 30
+   },
+   
+   "citizens" : [
+      {
+         "position" : {
+            "x" : 0,
+            "z" : -10
+         },
+         
+         "job" : "stonehearth:jobs:carpenter",
+         
+         "workshop" : {
+            "position" : {
+               "x" : -5,
+               "z" : -10
+            }
+         }
+      },
+      
+      {
+         "position" : {
+            "x" : 0,
+            "z" : -5
+         },
+         
+         "job" : "stonehearth:jobs:mason",
+         
+         "workshop" : {
+            "position" : {
+               "x" : -5,
+               "z" : -5
+            }
+         }
+      },
+      
+      {
+         "position" : {
+            "x" : 0,
+            "z" : 0
+         },
+         
+         "job" : "stonehearth:jobs:blacksmith",
+         
+         "workshop" : {
+            "position" : {
+               "x" : -5,
+               "z" : 0
+            }
+         }
+      },
+      
+      {
+         "position" : {
+            "x" : 0,
+            "z" : 5
+         },
+         
+         "job" : "stonehearth:jobs:weaver",
+         
+         "workshop" : {
+            "position" : {
+               "x" : -5,
+               "z" : 5
+            }
+         }
+      }
+   ]
+}

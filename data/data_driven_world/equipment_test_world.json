@@ -1,0 +1,54 @@
+{
+   "world" : {
+      "size" : 64
+   },
+   
+   "citizens" : [
+      {
+         "position" : {
+            "x" : -2,
+            "z" : -2
+         },
+         
+         "job" : "stonehearth:jobs:footman",
+         
+         "equipment" : [
+            "stonehearth:armor:steel_mail",
+            "stonehearth:armor:basic_shield",
+            "stonehearth:weapons:long_sword"
+         ]
+      },
+      
+      {
+         "position" : {
+            "x" : 2,
+            "z" : 2
+         },
+         
+         "equipment" : [
+            "stonehearth:worker:outfit:2"
+         ]
+      },
+      
+      {
+         "position" : {
+            "x" : -2,
+            "z" : 2
+         }
+      }
+   ],
+   
+   "stockpiles" : [
+      {
+         "position" : {
+            "x" : -2,
+            "z" : -2
+         },
+         
+         "dimension" : {
+            "width": 4,
+            "height" : 4
+         }
+      }
+   ]
+}

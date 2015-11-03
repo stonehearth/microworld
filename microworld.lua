@@ -20,17 +20,59 @@ function MicroWorld:create_world(size)
 
    -- create a trivial terrain.  just a flat, square world with bedrock, soil, and
    -- grass.
-   local half_size = size / 2
-   local block_types = radiant.terrain.get_block_types()
+   self:create_terrain({ base = Point3(0, -2, 0), dimension = Point3(size, 2, size) }, 'bedrock')
+   self:create_terrain({ base = Point3(0, 0, 0), dimension = Point3(size, 9, size) }, 'soil_dark')
+   self:create_terrain({ base = Point3(0, 9, 0), dimension = Point3(size, 1, size) }, 'grass')
+end
 
+-- creates a new block.
+-- `coordinates`is a table either containing two Point3 (or tables with x/y/z members) called
+--    - `min` and `max` if you wish to define it in a min/max coordinate style
+--    - `center` and `dimension` if you wish to have a centered block
+--    - `base` and `dimension` if you wish to have a centered block on top of `base`
+-- `block_type` is the name of the block type to be created 
+--              (as pulled from `radiant.terrain.get_block_types()`)
+function MicroWorld:create_terrain(coordinates, block_type)
    local region3 = Region3()
-   region3:add_cube(Cube3(Point3(0, -2, 0), Point3(size, 0,  size), block_types.bedrock))
-   region3:add_cube(Cube3(Point3(0,  0, 0), Point3(size, 9,  size), block_types.soil_dark))
-   region3:add_cube(Cube3(Point3(0,  9, 0), Point3(size, 10, size), block_types.grass))
-   region3 = region3:translated(Point3(-half_size, 0, -half_size))
+   local min, max
+   
+   -- Make sure that all the coordinates are Point3s
+   for k, v in pairs(coordinates) do
+      if not radiant.util.is_a(v, Point3) and radiant.util.is_a(v, 'table') then
+         coordinates[k] = Point3(v.x, v.y, v.z)
+      end
+   end
+   
+   -- does coordinates contain min/max?
+   if coordinates.min ~= nil and coordinates.max ~= nil then
+      min, max = coordinates.min, coordinates.max
+   elseif coordinates.dimension ~= nil then
+      local dimension_half = coordinates.dimension / 2
+      if coordinates.center ~= nil then
+         min = coordinates.center - Point3(math.floor(dimension_half.x), math.floor(dimension_half.y), math.floor(dimension_half.z))
+         max = coordinates.center + Point3(math.ceil(dimension_half.x), math.ceil(dimension_half.y), math.ceil(dimension_half.z))
+      elseif coordinates.base ~= nil then
+         min = Point3(
+                  coordinates.base.x - math.floor(dimension_half.x),
+                  coordinates.base.y,
+                  coordinates.base.z - math.floor(dimension_half.z)
+               )
+         max = Point3(
+                  coordinates.base.x + math.ceil(dimension_half.x),
+                  coordinates.base.y + coordinates.dimension.y,
+                  coordinates.base.z + math.ceil(dimension_half.z)
+               )
+      else
+         error('cannot determine coordinates of block (invalid coordinates passed)')
+      end
+   else
+      error('cannot determine coordinates of block (invalid coordinates passed)')
+   end
 
-   radiant._root_entity:add_component('terrain')
-                           :add_tile(region3)
+   local block_types = radiant.terrain.get_block_types()
+   region3:add_cube(Cube3(min, max, block_types[block_type]))
+   
+   radiant._root_entity:add_component('terrain'):add_tile(region3)
 end
 
 -- get the player_id of the local player.
@@ -44,13 +86,8 @@ end
 --    owner (string): the player_id of the owner of the object
 --
 function MicroWorld:create_entity(alias, options)
-   local entity = radiant.entities.create_entity(alias)
-   if options then
-      if options.owner then
-         entity:add_component('unit_info')
-                  :set_player_id(options.owner)
-      end
-   end
+   local entity = radiant.entities.create_entity(alias, options)
+   
    return entity
 end
 
@@ -111,6 +148,37 @@ function MicroWorld:place_citizen(x, z, job)
 
    radiant.terrain.place_entity(citizen, Point3(x, 1, z))
    return citizen
+end
+
+-- creates a workbench for `citizen` at (`x`/`z`)
+function MicroWorld:create_workbench(citizen, x, z)
+   -- Get the job component
+   local job_component = citizen:get_component('stonehearth:job')
+   if not job_component then
+      error('citizen has no stonehearth:job component! (did you forget the promotion?)', 2)
+   end
+   
+   -- Get the crafter component
+   local crafter_component = citizen:get_component('stonehearth:crafter')
+   if not crafter_component then
+      error('citizen has no stonehearth:crafter component!', 2)
+   end
+   
+   -- Create the workshop, pulling the entity ref from the job's definition
+   local job_definition = radiant.resources.load_json(job_component:get_job_uri())
+   local workbench = self:place_entity(job_definition.workshop.workbench_type, x, z, { full_size = true, owner = self:get_local_player_id() })
+   
+   -- Link worker and crafter together
+   local workshop_component = workbench:get_component('stonehearth:workshop')
+   
+   if not workshop_component then
+      error('workbench has no stonehearth:workshop component!', 2)
+   end
+   
+   crafter_component:set_workshop(workshop_component)
+   workshop_component:set_crafter(citizen)
+   
+   return workbench
 end
 
 -- place a stockpile for the local player at `x`, `z`

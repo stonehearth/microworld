@@ -5,7 +5,15 @@
    },
 
    "server_init_script" : "file(microworld)",
-
+   
+   "aliases" : {
+      "data_driven:world:mini_game" : "file(data/data_driven_world/mini_game_world.json)",
+      "data_driven:world:harvest_test" : "file(data/data_driven_world/harvest_test_world.json)",
+      "data_driven:world:profession_test" : "file(data/data_driven_world/profession_test_world.json)",
+      "data_driven:world:equipment_test" : "file(data/data_driven_world/equipment_test_world.json)",
+      "data_driven:world:terrain_test" : "file(data/data_driven_world/terrain_test_world.json)"
+   },
+   
    "ui" :  {
       "homepage" : "http://radiant/stonehearth/ui/root/index.html?skip_title=true"
    }

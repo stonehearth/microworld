@@ -1,0 +1,167 @@
+{
+   "world" : {
+      "size" : 64
+   },
+   
+   "entities" : [
+      {
+         "alias" : "stonehearth:large_oak_tree",
+         
+         "position" : {
+            "x" : -25,
+            "z": -25
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:medium_oak_tree",
+         
+         "position" : {
+            "x": -5,
+            "z": -25
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:small_oak_tree",
+         
+         "position" : {
+            "x" : 15,
+            "z" : -25
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:large_juniper_tree",
+         
+         "position" : {
+            "x" : -25,
+            "z" : -5
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:medium_juniper_tree",
+         
+         "position" : {
+            "x" : -5,
+            "z": -5
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:small_juniper_tree",
+         
+         "position" : {
+            "x" : 15,
+            "z" : -5
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:large_boulder_1",
+         
+         "position" : {
+            "x" : -25,
+            "z" : 5
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:medium_boulder_1",
+         
+         "position" : {
+            "x" : -15,
+            "z" : 5
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:small_boulder",
+         
+         "position" : {
+            "x" : -5,
+            "z" : 5
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:small_boulder",
+         
+         "position" : {
+            "x" : 5,
+            "z" : 5
+         },
+         
+         "rotation" : 90
+      },
+      
+      {
+         "alias" : "stonehearth:small_boulder",
+         
+         "position" : {
+            "x" : 15,
+            "z" : 5
+         },
+         
+         "rotation" : 90
+      },
+      
+      {
+         "alias" : "stonehearth:berry_bush",
+         
+         "position" : {
+            "x" : -25,
+            "z" : 15
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:berry_bush",
+         
+         "position" : {
+            "x" : -15,
+            "z" : 15
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:plants:silkweed",
+         
+         "position" : {
+            "x" : -5,
+            "z" : 15
+         }
+      }
+   ],
+         
+   "citizens": [
+      {
+         "position" : {
+            "x" : 12,
+            "z" : 12
+         }
+      },
+      
+      {
+         "position" : {
+            "x" : 14,
+            "z" : 14
+         }
+      }
+   ],
+   
+   "stockpiles" : [
+      {
+         "position" : {
+            "x" : 12,
+            "z" : 12
+         },
+         
+         "dimension" : {
+            "width" : 4,
+            "height" : 4
+         }
+      }
+   ]
+}
