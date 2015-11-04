@@ -37,7 +37,7 @@
       },
       
       {
-         "alias" : "stonehearth:large_oak_tree",
+         "alias" : "stonehearth:trees:oak:large",
          
          "position" : {
             "x": -12,
@@ -46,7 +46,7 @@
       },
       
       {
-         "alias" : "stonehearth:medium_oak_tree",
+         "alias" : "stonehearth:trees:oak:medium",
          
          "position" : {
             "x" : 14,
@@ -55,7 +55,7 @@
       },
       
       {
-         "alias" : "stonehearth:medium_oak_tree",
+         "alias" : "stonehearth:trees:oak:medium",
          
          "position" : {
             "x" : 11,
@@ -64,7 +64,7 @@
       },
       
       {
-         "alias" : "stonehearth:small_oak_tree",
+         "alias" : "stonehearth:trees:oak:small",
          
          "position" : {
             "x" : -10,

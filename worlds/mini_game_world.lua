@@ -28,10 +28,10 @@ function MiniGame:start()
    end
 
    -- drop some trees, too
-   microworld:place_entity('stonehearth:large_oak_tree', -12, -12)
-   microworld:place_entity('stonehearth:medium_oak_tree',  14, -13)
-   microworld:place_entity('stonehearth:medium_oak_tree',  11,  16)
-   microworld:place_entity('stonehearth:small_oak_tree', -10,  15)
+   microworld:place_entity('stonehearth:trees:oak:large', -12, -12)
+   microworld:place_entity('stonehearth:trees:oak:medium',  14, -13)
+   microworld:place_entity('stonehearth:trees:oak:medium',  11,  16)
+   microworld:place_entity('stonehearth:trees:oak:small', -10,  15)
 
    -- and a cute little fox.
    microworld:place_entity('stonehearth:red_fox', 2, 2)
