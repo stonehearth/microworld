@@ -23,7 +23,7 @@ function MiniGame:start()
    -- add some bushes so our citizens don't starve
    for x = 1,4 do
       for z = 1,2 do
-         microworld:place_entity('stonehearth:berry_bush', 4 + x * 4, 2 + z * 4)
+         microworld:place_entity('stonehearth:plants:berry_bush', 4 + x * 4, 2 + z * 4)
       end
    end
 
