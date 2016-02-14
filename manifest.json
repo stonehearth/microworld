@@ -1,7 +1,7 @@
 {
    "info" :{
       "name" : "Microworld",
-      "version" : 1
+      "version" : 2
    },
 
    "server_init_script" : "file(microworld)",
