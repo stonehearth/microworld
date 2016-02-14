@@ -23,8 +23,8 @@ function HarvestTest:start()
    microworld:place_entity('stonehearth:boulder:small',    15, 5)
        :add_component('mob'):turn_to(90)
 
-   microworld:place_entity('stonehearth:berry_bush', -25, 15)
-   microworld:place_entity('stonehearth:berry_bush', -15, 15)
+   microworld:place_entity('stonehearth:plants:berry_bush', -25, 15)
+   microworld:place_entity('stonehearth:plants:berry_bush', -15, 15)
    microworld:place_entity('stonehearth:plants:silkweed',  -5, 15)
 
    -- add two workers.
