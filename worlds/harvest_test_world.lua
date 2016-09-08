@@ -1,39 +1,44 @@
-local HarvestTest = class()
+local MicroWorld = require 'micro_world'
+local Point3 = _radiant.csg.Point3
 
-function HarvestTest:start()
-   microworld:create_world(64)
+local HarvestTest = class(MicroWorld)
+
+function HarvestTest:__init()
+   self[MicroWorld]:__init(128)
+   self:create_world()
+   local player_id = self:get_session().player_id
 
    -- place some trees around the world
-   microworld:place_entity('stonehearth:trees:oak:large', -25, -25)
-   microworld:place_entity('stonehearth:trees:oak:medium', -5, -25)
-   microworld:place_entity('stonehearth:trees:oak:small',  15, -25)
+   self:place_item('stonehearth:trees:oak:large', -25, -25, player_id)
+   self:place_item('stonehearth:trees:oak:medium', -5, -25, player_id)
+   self:place_item('stonehearth:trees:oak:small',  15, -25, player_id)
 
-   microworld:place_entity('stonehearth:trees:juniper:large', -25, -5)
-   microworld:place_entity('stonehearth:trees:juniper:medium', -5, -5)
-   microworld:place_entity('stonehearth:trees:juniper:small',  15, -5)
+   self:place_item('stonehearth:trees:juniper:large', -25, -5, player_id)
+   self:place_item('stonehearth:trees:juniper:medium', -5, -5, player_id)
+   self:place_item('stonehearth:trees:juniper:small',  15, -5, player_id)
 
    -- place some boulders.  those can be harvested, too!
-   microworld:place_entity('stonehearth:boulder:large_1',  -25, 5)
-   microworld:place_entity('stonehearth:boulder:medium_1', -15, 5)
-   microworld:place_entity('stonehearth:boulder:small',   -5, 5)
+   self:place_item('stonehearth:boulder:large_1',  -25, 5, player_id)
+   self:place_item('stonehearth:boulder:medium_1', -15, 5, player_id)
+   self:place_item('stonehearth:boulder:small',   -5, 5, player_id)
 
-   microworld:place_entity('stonehearth:boulder:small',    5, 5)
+   self:place_item('stonehearth:boulder:small',    5, 5, player_id)
        :add_component('mob'):turn_to(90)
 
-   microworld:place_entity('stonehearth:boulder:small',    15, 5)
+   self:place_item('stonehearth:boulder:small',    15, 5, player_id)
        :add_component('mob'):turn_to(90)
 
-   microworld:place_entity('stonehearth:berry_bush', -25, 15)
-   microworld:place_entity('stonehearth:berry_bush', -15, 15)
-   microworld:place_entity('stonehearth:plants:silkweed',  -5, 15)
+   self:place_item('stonehearth:plants:berry_bush', -25, 15, player_id)
+   self:place_item('stonehearth:plants:berry_bush', -15, 15, player_id)
+   self:place_item('stonehearth:plants:silkweed',  -5, 15, player_id)
 
    -- add two workers.
-   microworld:place_citizen(12, 12)
-   microworld:place_citizen(14, 14)
+   self:place_citizen(12, 12)
+   self:place_citizen(14, 14)
 
    -- create a stockpile so the workers will have someplace to drop
    -- their stuff if you harvest a tree now.
-   microworld:place_stockpile(12, 12, 4, 4)
+   self:place_stockpile_cmd(player_id, 12, 12, 4, 4)
 end
 
 return HarvestTest

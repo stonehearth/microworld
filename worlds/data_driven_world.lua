@@ -2,12 +2,16 @@ local Point3 = _radiant.csg.Point3
 -- localising for performance/maintenance reasons
 local is_table, is_string, is_number = radiant.check.is_table, radiant.check.is_string, radiant.check.is_number
 
-local DataDriven = class()
+local MicroWorld = require 'micro_world'
+local DataDriven = class(MicroWorld)
 
 function DataDriven:__init()
    local index_reference = radiant.util.get_config('data_driven_index', 'microworld:data_driven:world:mini_game')
-   
    self._config = radiant.resources.load_json(index_reference)
+   
+   -- World Creation
+   self[MicroWorld]:__init(self:_get_config('world.size', 64))
+   self:create_world()
 end
 
 -- Returns the value at `key_name` (which can contain sub-keys in the format
@@ -38,9 +42,6 @@ local function _get_value(source, key_name, default_value)
 end
 
 function DataDriven:start()
-   -- World creation
-   microworld:create_world(self:_get_config('world.size', 64))
-   
    -- Create additional terrain, if requested.
    -- `world.terrain` (Array) contains objects which are passed directly to `MicroWorld:create_terrain` 
    -- in terms of coordinates. The key `block_type` is used to determine what kind of block it creates.
@@ -48,16 +49,16 @@ function DataDriven:start()
    -- world (microworld:data_driven:world:terrain_test)
    for _, terrain in pairs(self:_get_config('world.terrain', {})) do
       is_string(terrain.block_type)
-      microworld:create_terrain(terrain, terrain.block_type)
+      self:create_terrain(terrain, terrain.block_type)
    end
    
-   local player_id = microworld:get_local_player_id()
+   local player_id = self:get_session().player_id
    local pop = stonehearth.population:get_population(player_id)
 
    -- If world.town_position was set, embark
    if self._config.world.town_position then
       local town_x, town_z = self:_get_config('world.town_position.x', 0), self:_get_config('world.town_position.z', 0)
-      microworld:place_town_banner(town_x, town_z)
+      self:place_town_banner(town_x, town_z, player_id)
    end
    
    -- entities (Array)
@@ -123,7 +124,7 @@ function DataDriven:start()
       -- does currently not support set spaces between entities.
       for x_inc = 0, repeat_x - 1 do
          for z_inc = 0, repeat_z - 1 do
-            local entity = microworld:place_entity(alias, x + x_inc * offset_x, z + z_inc * offset_z, final_data)
+            local entity = self:place_item(alias, x + x_inc * offset_x, z + z_inc * offset_z, player_id, final_data)
             
             if rotation then
                entity:add_component('mob'):turn_to(rotation)
@@ -160,7 +161,7 @@ function DataDriven:start()
       is_number(x)
       is_number(z)
       
-      local worker = microworld:place_citizen(x, z, citizen_def.job)
+      local worker = self:place_citizen(x, z, citizen_def.job)
       
       if citizen_def.carrying then
          is_string(citizen_def.carrying)
@@ -180,7 +181,7 @@ function DataDriven:start()
          is_number(x)
          is_number(z)
          
-         microworld:create_workbench(worker, x, z)
+         self:create_workbench(worker, x, z)
       end
       
       -- 
@@ -212,7 +213,7 @@ function DataDriven:start()
       is_number(width)
       is_number(height)
       
-      microworld:place_stockpile(x, z, width, height)
+      self:place_stockpile_cmd(player_id, x, z, width, height)
    end
 end
 

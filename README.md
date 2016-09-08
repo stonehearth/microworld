@@ -6,8 +6,8 @@ Introduction
 
 The Microworld mod provides a simple playground for mod developers to test their
 changes.  It replaces the standard world creation process with one which creates
-very trivial, very tiny worlds.  The mod comes with two worlds to choose from:
-"mini\_game" which mimics the start of a regular game and "harvest\_test" which
+very trivial, very tiny worlds.  The mod comes with a few worlds to choose from.
+"mini\_game" mimics the start of a regular game and "harvest\_test" which
 creates two workers, a stockpile, and some harvestable entities.
 
  

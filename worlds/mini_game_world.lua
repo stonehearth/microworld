@@ -1,52 +1,37 @@
-
+local MicroWorld = require 'micro_world'
 local Point3 = _radiant.csg.Point3
 
-local MiniGame = class()
+local MiniGame = class(MicroWorld)
 
-function MiniGame:start()
+function MiniGame:__init()
    -- create a tiny world
-   microworld:create_world(128)
+   self[MicroWorld]:__init(128)
+   self:create_world()
 
-   local player_id = microworld:get_local_player_id()
+   local player_id = self:get_session().player_id
    local pop = stonehearth.population:get_population(player_id)
 
-   -- embark at 0, 0
-   microworld:place_town_banner(0, 0)
-
-   -- make sure the firepit is owned by the local player.  otherwise we'll
-   -- run into trouble when people go to light it.
-   microworld:place_entity('stonehearth:decoration:firepit', 0, 11, {
-         owner = player_id,
-         full_size = true,
-      })
+   -- create a settlement with a banner and firepit
+   -- and 6 workers around the point(0,0)
+   local workers = self:create_settlement({ worker = 6 }, 0, 0)
 
    -- add some bushes so our citizens don't starve
    for x = 1,4 do
       for z = 1,2 do
-         microworld:place_entity('stonehearth:berry_bush', 4 + x * 4, 2 + z * 4)
+         self:place_item('stonehearth:plants:berry_bush', 4 + x * 4, 2 + z * 4)
       end
    end
 
    -- drop some trees, too
-   microworld:place_entity('stonehearth:trees:oak:large', -12, -12)
-   microworld:place_entity('stonehearth:trees:oak:medium',  14, -13)
-   microworld:place_entity('stonehearth:trees:oak:medium',  11,  16)
-   microworld:place_entity('stonehearth:trees:oak:small', -10,  15)
+   self:place_item('stonehearth:trees:oak:large', -12, -12, player_id)
+   self:place_item('stonehearth:trees:oak:medium',  14, -13, player_id)
+   self:place_item('stonehearth:trees:oak:medium',  11,  16, player_id)
+   self:place_item('stonehearth:trees:oak:small', -10,  15, player_id)
 
    -- and a cute little fox.
-   microworld:place_entity('stonehearth:red_fox', 2, 2)
-
-   -- create all the workers.
-   local workers = {}
-   for x = 1,3 do
-      for z = 1,2 do
-         local worker = microworld:place_citizen(-5 + (x * 3), -5 + (z * 3))
-         table.insert(workers, worker)
-      end
-   end
+   self:place_item('stonehearth:red_fox', 2, 2, player_id)
 
    -- give some of the workers some starting items.
-   local player_id = microworld:get_local_player_id()
    local pop = stonehearth.population:get_population(player_id)
 
    local function pickup(who, uri)
