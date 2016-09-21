@@ -84,9 +84,9 @@ function MicroWorld:place_item_cluster(uri, x, z, w, h, player_id)
    end
 end
 
-function MicroWorld:place_citizen(x, z, job)
+function MicroWorld:place_citizen(x, z, job, gender)
    local pop = stonehearth.population:get_population('player_1')
-   local citizen = pop:create_new_citizen()
+   local citizen = pop:create_new_citizen(nil, gender)
    job = job or 'stonehearth:jobs:worker'
 
    if not string.find(job, ':') and not string.find(job, '/') then
