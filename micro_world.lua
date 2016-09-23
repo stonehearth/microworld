@@ -249,7 +249,7 @@ end
 
 function MicroWorld:add_to_storage(entity, item_uri)
    local storage = entity:get_component('stonehearth:storage')
-   local item = radiant.entities.create_entity(item_uri)
+   local item = radiant.entities.create_entity(item_uri, {owner = entity})
    local root, iconic = entity_forms_lib.get_forms(item)
    if iconic then
       storage:add_item(iconic)
