@@ -26,7 +26,7 @@ function MicroWorld:get_session()
    return self._session
 end
 
-function MicroWorld:create_world(kingdom)
+function MicroWorld:create_world(kingdom, biome)
    local session = self:get_session()
    if not kingdom then
       kingdom = 'stonehearth:kingdoms:ascendancy'
@@ -36,7 +36,7 @@ function MicroWorld:create_world(kingdom)
 
    stonehearth.player:add_player(session.player_id)
    stonehearth.player:add_kingdom(session.player_id, kingdom)   
-   stonehearth.world_generation:create_empty_world()
+   stonehearth.world_generation:create_empty_world(biome)
 
    assert(self._size % 2 == 0)
    local half_size = self._size / 2
