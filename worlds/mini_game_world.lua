@@ -18,7 +18,7 @@ function MiniGame:__init()
    -- add some bushes so our citizens don't starve
    for x = 1,4 do
       for z = 1,2 do
-         self:place_item('stonehearth:plants:berry_bush', 4 + x * 4, 2 + z * 4)
+         self:place_item('stonehearth:plants:berry_bush', 8 + x * 4, 2 + z * 4, player_id, {force_iconic=false})
       end
    end
 
