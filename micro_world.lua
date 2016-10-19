@@ -84,6 +84,12 @@ function MicroWorld:place_item_cluster(uri, x, z, w, h, player_id)
    end
 end
 
+function MicroWorld:place_filled_container(uri, x, y, player_id, container_uri)
+   container_uri = container_uri or 'stonehearth:containers:stone_chest'
+   local container = self:place_item(container_uri, x, y, player_id, { force_iconic = false })
+   self:fill_storage(container, uri)
+end
+
 function MicroWorld:place_citizen(x, z, job, gender)
    local pop = stonehearth.population:get_population('player_1')
    local citizen = pop:create_new_citizen(nil, gender)
