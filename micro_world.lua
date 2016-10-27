@@ -242,6 +242,18 @@ function MicroWorld:spawn_monster(x, z, npc_player_id, info, role)
    return members
 end
 
+function MicroWorld:create_enemy_party(player_id, enemies)
+   local party_entity = stonehearth.unit_control:get_controller(player_id):create_party()
+   local party_component = party_entity:get_component('stonehearth:party')
+
+   local citizens = type(enemies) == 'table' and enemies or { enemies }
+   for _, citizen in pairs(citizens) do
+      party_component:add_member(citizen)
+   end
+
+   return party_entity
+end
+
 function MicroWorld:place_stockpile_cmd(player_id, x, z, w, h)
    w = w and w or 3
    h = h and h or 3
