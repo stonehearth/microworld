@@ -32,11 +32,13 @@ function MicroWorld:create_world(kingdom, biome)
       kingdom = 'stonehearth:kingdoms:ascendancy'
    end
    
+   stonehearth.world_generation:create_empty_world(biome)
+
    stonehearth.catalog:start()
 
    stonehearth.player:add_player(session.player_id)
    stonehearth.player:add_kingdom(session.player_id, kingdom)   
-   stonehearth.world_generation:create_empty_world(biome)
+
 
    assert(self._size % 2 == 0)
    local half_size = self._size / 2
