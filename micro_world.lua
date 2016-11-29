@@ -106,7 +106,8 @@ function MicroWorld:place_citizen(x, z, job, gender)
    local path = job_component:get_job_description_path(job)
    local job_json = radiant.resources.load_json(path, true)
 
-   radiant.terrain.place_entity(citizen, Point3(x, 1, z))
+   -- place them facing the camera
+   radiant.terrain.place_entity(citizen, Point3(x, 1, z), { facing = 180 })
 
    if job_json.parent_level_requirement then
       job_component:promote_to(job_json.parent_job)
