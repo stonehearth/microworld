@@ -391,6 +391,11 @@ function MicroWorld:create_settlement(options, x, z, spacing)
       end
    end
 
+   local town = stonehearth.town:get_town(player_id)
+   if town then
+      town:check_for_combat_job_presence()
+   end
+
    return citizens
 end
 
