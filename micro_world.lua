@@ -92,10 +92,11 @@ function MicroWorld:place_filled_container(uri, x, y, player_id, container_uri)
    self:fill_storage(container, uri)
 end
 
-function MicroWorld:place_citizen(x, z, job, gender)
+function MicroWorld:place_citizen(x, z, job, gender, options)
    local pop = stonehearth.population:get_population('player_1')
    local citizen = pop:create_new_citizen(nil, gender)
    job = job or 'stonehearth:jobs:worker'
+   options = options or {}
 
    if not string.find(job, ':') and not string.find(job, '/') then
       -- as a convenience for autotest writers, stick the stonehearth:job on
@@ -115,6 +116,10 @@ function MicroWorld:place_citizen(x, z, job, gender)
    end
 
    job_component:promote_to(job)
+
+   if options.clear_traits and citizen:get_component('stonehearth:traits') then
+      citizen:get_component('stonehearth:traits'):clear_all_traits()
+   end
 
    return citizen
 end
