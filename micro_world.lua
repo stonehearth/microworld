@@ -440,46 +440,26 @@ end
 
 --Place all the equipment in all the relevant mods in the test world
 function MicroWorld:place_all_entities_passing_filter(player_id, x, z, filter_fn)
-   local mods = {} --radiant.resources.get_mod_list()
-   table.insert(mods, 'stonehearth')
+   local all_entities = stonehearth.catalog:get_all_entity_uris()
    local x = x
    local z = z
    
-   -- for each mod
-   for i, mod in ipairs(mods) do
-      local manifest = radiant.resources.load_manifest(mod)
-      -- for each alias
-      if manifest.aliases then
-         for alias, uri in pairs(manifest.aliases) do
-            -- is it placeable?
-            local full_alias = mod .. ':' .. alias
-            local path = radiant.resources.convert_to_canonical_path(full_alias)
-
-            if path ~= nil and filter_fn(path) then
-               for i = 1, 4 do
-                  -- place the entity into the world
-                  self:place_item(full_alias, x, z, player_id)
-                  x = (x + 1) % 8
-                  if x == 0 then
-                     z = z + 1
-                  end
-               end
+   for uri in pairs(all_entities) do
+      if filter_fn(uri) then
+         for i = 1, 4 do
+            -- place the entity into the world
+            self:place_item(uri, x, z, player_id)
+            x = (x + 1) % 8
+            if x == 0 then
+               z = z + 1
             end
          end
       end
    end
 end
 
-local alias_is_equipment = function(path)
-   if string.sub(path, -5) ~= '.json' then
-      return false
-   end
-
-   local json = radiant.resources.load_json(path)
-
-   if not json.type or json.type ~= 'entity' then
-      return false
-   end
+local alias_is_equipment = function(uri)
+   local json = radiant.resources.load_json(uri)
 
    if json['components'] ~= nil and 
       json['components']['stonehearth:equipment_piece'] ~= nil and
