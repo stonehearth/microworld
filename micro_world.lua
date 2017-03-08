@@ -34,8 +34,6 @@ function MicroWorld:create_world(kingdom, biome)
    
    stonehearth.world_generation:create_empty_world(biome)
 
-   stonehearth.catalog:start()
-
    stonehearth.player:add_player(session.player_id)
    stonehearth.player:add_kingdom(session.player_id, kingdom)   
 
