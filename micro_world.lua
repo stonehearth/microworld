@@ -31,11 +31,11 @@ function MicroWorld:create_world(kingdom, biome)
    if not kingdom then
       kingdom = 'stonehearth:kingdoms:ascendancy'
    end
-   
+
    stonehearth.world_generation:create_empty_world(biome)
 
    stonehearth.player:add_player(session.player_id)
-   stonehearth.player:add_kingdom(session.player_id, kingdom)   
+   stonehearth.player:add_kingdom(session.player_id, kingdom)
 
 
    assert(self._size % 2 == 0)
@@ -91,10 +91,11 @@ function MicroWorld:place_filled_container(uri, x, y, player_id, container_uri)
 end
 
 function MicroWorld:place_citizen(x, z, job, gender, options)
-   local pop = stonehearth.population:get_population('player_1')
-   local citizen = pop:create_new_citizen(nil, gender)
    job = job or 'stonehearth:jobs:worker'
-   options = options or {}
+   options = options or {suppress_traits=true}  -- Without traits is the default in MicroWorld
+
+   local pop = stonehearth.population:get_population('player_1')
+   local citizen = pop:create_new_citizen(nil, gender, options)
 
    if not string.find(job, ':') and not string.find(job, '/') then
       -- as a convenience for autotest writers, stick the stonehearth:job on
@@ -127,19 +128,19 @@ end
 --    - `min` and `max` if you wish to define it in a min/max coordinate style
 --    - `center` and `dimension` if you wish to have a centered block
 --    - `base` and `dimension` if you wish to have a centered block on top of `base`
--- `block_type` is the name of the block type to be created 
+-- `block_type` is the name of the block type to be created
 --              (as pulled from `radiant.terrain.get_block_types()`)
 function MicroWorld:create_terrain(coordinates, block_type)
    local region3 = Region3()
    local min, max
-   
+
    -- Make sure that all the coordinates are Point3s
    for k, v in pairs(coordinates) do
       if not radiant.util.is_a(v, Point3) and radiant.util.is_a(v, 'table') then
          coordinates[k] = Point3(v.x, v.y, v.z)
       end
    end
-   
+
    -- does coordinates contain min/max?
    if coordinates.min ~= nil and coordinates.max ~= nil then
       min, max = coordinates.min, coordinates.max
@@ -168,7 +169,7 @@ function MicroWorld:create_terrain(coordinates, block_type)
 
    local block_types = radiant.terrain.get_block_types()
    region3:add_cube(Cube3(min, max, block_types[block_type]))
-   
+
    radiant._root_entity:add_component('terrain'):add_tile(region3)
 end
 
@@ -186,34 +187,34 @@ function MicroWorld:create_workbench(citizen, x, z)
    if not job_component then
       error('citizen has no stonehearth:job component! (did you forget the promotion?)', 2)
    end
-   
+
    -- Get the crafter component
    local crafter_component = citizen:get_component('stonehearth:crafter')
    if not crafter_component then
       error('citizen has no stonehearth:crafter component!', 2)
    end
-   
+
    -- Create the workshop, pulling the entity ref from the job's definition
    local job_definition = radiant.resources.load_json(job_component:get_job_uri())
    local player_id = self:get_session().player_id
    local workbench = self:place_item(job_definition.workshop.workbench_type, x, z, player_id, { force_iconic = false })
-   
+
    -- Link worker and crafter together
    local workshop_component = workbench:get_component('stonehearth:workshop')
-   
+
    if not workshop_component then
       error('workbench has no stonehearth:workshop component!', 2)
    end
-   
+
    crafter_component:set_current_workshop(workshop_component)
-   
+
    return workbench
 end
 
 -- Spawns monsters at the specified x,z location
 -- Uses tuning data file or info similar to that in encounter files
 -- to modify monster
--- ex. spawn_monster(0, 0, 'goblins', 'stonehearth:monster_tuning:goblins:marauder') or 
+-- ex. spawn_monster(0, 0, 'goblins', 'stonehearth:monster_tuning:goblins:marauder') or
 -- info = {
 --    from_population = {
 --       role = 'wolf',
@@ -382,7 +383,7 @@ function MicroWorld:create_settlement(options, x, z, spacing)
             end
             if levels_array and levels_array[i] then
                 self:level_up_citizen(citizen, levels_array[i])
-            elseif level then 
+            elseif level then
                self:level_up_citizen(citizen, level)
             end
             table.insert(citizens, citizen)
@@ -443,7 +444,7 @@ function MicroWorld:place_all_entities_passing_filter(player_id, x, z, filter_fn
    local all_entities = stonehearth.catalog:get_all_entity_uris()
    local x = x
    local z = z
-   
+
    for uri in pairs(all_entities) do
       if filter_fn(uri) then
          for i = 1, 4 do
@@ -461,7 +462,7 @@ end
 local alias_is_equipment = function(uri)
    local json = radiant.resources.load_json(uri)
 
-   if json['components'] ~= nil and 
+   if json['components'] ~= nil and
       json['components']['stonehearth:equipment_piece'] ~= nil and
       json['components']['stonehearth:equipment_piece'].roles ~= nil then
       return true
@@ -482,12 +483,12 @@ function MicroWorld:create_resource_stockpiles(player_id)
    self:place_item_cluster('stonehearth:food:berries:berry_basket', -10, 20, 4, 4, 'player_1')
    local storage_component = food_stockpile:get_component('stonehearth:storage')
    storage_component:set_filter({ "food_container", "prepared_food", "cooking_ingredient", "drink" })
-   
+
    inventory:create_stockpile(Point3(20, 1, 10), Point2(4, 4))
    self:place_item_cluster('stonehearth:consumables:healing_tonic:small', 20, 10, 4, 4, 'player_1')
    inventory:create_stockpile(Point3(13, 1, 20), Point2(4, 4))
    self:place_item_cluster('stonehearth:consumables:coarse_bandage', 13, 20, 4, 4, 'player_1')
-   
+
    local function restock_items()
       local inventory = stonehearth.inventory:get_inventory('player_1')
       if not inventory:get_items_of_type('stonehearth:food:berries:berry_basket') then
