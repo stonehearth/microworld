@@ -1,0 +1,136 @@
+{
+   "world" : {
+      "size" : 64,
+      "town_position" : { "x": 0, "z": 0 }
+   },
+   
+   "entities" : [
+      {
+         "alias" : "stonehearth:decoration:firepit",
+         
+         "position" : {
+            "x" : 0,
+            "z" : 11
+         },
+         
+         "requires_owner": true,
+         "full_size" : true
+      },
+      
+      {
+         "alias" : "stonehearth:plants:berry_bush",
+         
+         "position" : {
+            "x" : 4,
+            "z" : 2
+         },
+         
+         "repeat" : {
+            "x" : 4,
+            "z" : 2
+         },
+         
+         "offset" : {
+            "x" : 4,
+            "z" : 4
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:trees:oak:large",
+         
+         "position" : {
+            "x": -12,
+            "z" : -12
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:trees:oak:medium",
+         
+         "position" : {
+            "x" : 14,
+            "z" : -1
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:trees:oak:medium",
+         
+         "position" : {
+            "x" : 11,
+            "z" : 16
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:trees:oak:small",
+         
+         "position" : {
+            "x" : -10,
+            "z" : 15
+         }
+      },
+      
+      {
+         "alias" : "stonehearth:red_fox",
+         
+         "position" : {
+            "x" : 2,
+            "z" : 2
+         }
+      }
+   ],
+         
+   "citizens": [
+      {
+         "position" : {
+            "x" : -2,
+            "z" : -2
+         }
+      },
+      
+      {
+         "position" : {
+            "x" : -2,
+            "z" : 1
+         },
+         
+         "carrying" : "stonehearth:resources:fiber:silkweed_bundle"
+      },
+      
+      {
+         "position" : {
+            "x" : 1,
+            "z" : -2
+         },
+         
+         "carrying" : "stonehearth:trapper:talisman"
+      },
+      
+      {
+         "position" : {
+            "x" : 1,
+            "z" : 1
+         },
+         
+         "carrying" : "stonehearth:carpenter:talisman"
+      },
+      
+      {
+         "position" : {
+            "x" : 4,
+            "z" : -2
+         }
+      },
+      
+      {
+         "position" : {
+            "x" : 4,
+            "z" : 1
+         },
+         
+         "carrying" : "stonehearth:resources:wood:oak_log"
+      }
+   ]
+}
