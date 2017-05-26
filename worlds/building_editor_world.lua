@@ -15,29 +15,29 @@ function BuildingEditor:__init()
    -- and 6 workers around the point(0,0)
    local workers = self:create_settlement({
                                               carpenter = {
-												 num = 1,
-												 level = 6
-											  },
-											  potter = {
-												 num = 1,
-												 level = 6
-											  },
-											  mason = {
-												 num = 1,
-												 level = 6
-											  },
-											  blacksmith = {
-												 num = 1,
-												 level = 6
-											  },
-											  weaver = {
-												 num = 1,
-												 level = 6
-											  },
-											  engineer = {
-												 num = 1,
-												 level = 6
-											  }
+                                                 num = 1,
+                                                 level = 6
+                                              },
+                                              potter = {
+                                                 num = 1,
+                                                 level = 6
+                                              },
+                                              mason = {
+                                                 num = 1,
+                                                 level = 6
+                                              },
+                                              blacksmith = {
+                                                 num = 1,
+                                                 level = 6
+                                              },
+                                              weaver = {
+                                                 num = 1,
+                                                 level = 6
+                                              },
+                                              engineer = {
+                                                 num = 1,
+                                                 level = 6
+                                              }
                                           }, 0, 0)
 
 end

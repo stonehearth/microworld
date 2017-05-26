@@ -15,7 +15,6 @@ creates two workers, a stockpile, and some harvestable entities.
 For more information about Stonehearth, please visit http://stonehearth.net
 
 
-
 Installing
 ----------
 
