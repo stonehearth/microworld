@@ -76,7 +76,7 @@ run the harvest\_test game world every time you run Stonehearth:
 
 Running Building Editor Mod
 ===========================
-Stonehearth.exe" --game.main_mod=microworld --mods.microworld.world=building_editor
+Stonehearth.exe --game.main_mod=microworld --mods.microworld.world=building_editor
 
 
  
