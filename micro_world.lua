@@ -365,17 +365,19 @@ function MicroWorld:create_settlement(options, x, z, spacing)
    if type(options) == 'table' then
       for class_name, info in pairs(options) do
          local num = info
-         local attributes, level, levels_array
+         local attributes, level, levels_array, gender, opts
 
          if type(info) == 'table' then
             num = info.num
             attributes = info.attributes
             level = info.level
             levels_array = info.levels
+            gender = info.gender
+            opts = info.options
          end
 
          for i=1, num do
-            local citizen = self:place_citizen(x, y, class_name)
+            local citizen = self:place_citizen(x, y, class_name, gender, opts)
             if attributes then
                for attr, value in pairs(attributes) do
                   radiant.entities.set_attribute(citizen, attr, value)
