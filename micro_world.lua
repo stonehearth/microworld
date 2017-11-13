@@ -84,6 +84,24 @@ function MicroWorld:place_item_cluster(uri, x, z, w, h, player_id)
    end
 end
 
+function MicroWorld:place_item_list(uri_list, x, z, x_offset, z_offset, player_id, options)
+   for num, uri in pairs(uri_list) do
+      if uri ~= '' then
+         local entity = radiant.entities.create_entity(uri, {owner = player_id})
+         entity = radiant.terrain.place_entity(entity, Point3(x+num*x_offset, 1, z+num*z_offset), options)
+         if player_id then
+            local inventory = stonehearth.inventory:get_inventory(player_id)
+            if inventory and not inventory:contains_item(entity) then
+               inventory:add_item(entity)
+            end
+         end
+      end
+   end
+
+end
+
+
+
 function MicroWorld:place_filled_container(uri, x, y, player_id, container_uri)
    container_uri = container_uri or 'stonehearth:containers:stone_chest'
    local container = self:place_item(container_uri, x, y, player_id, { force_iconic = false })
