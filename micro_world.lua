@@ -36,7 +36,7 @@ function MicroWorld:create_world(kingdom, biome)
 
    stonehearth.player:add_player(session.player_id)
    stonehearth.player:add_kingdom(session.player_id, kingdom)
-
+   stonehearth.terrain:set_fow_enabled(session.player_id, false)
 
    assert(self._size % 2 == 0)
    local half_size = self._size / 2
