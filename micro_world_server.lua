@@ -17,6 +17,10 @@ radiant.events.listen(micro_world_server, 'radiant:new_game', function(args)
          error(string.format('failed to require world script "%s".', script_name))
       end
 
+      radiant.events.listen(radiant, 'radiant:client_joined', function(args)
+         _radiant.sim.start_game()
+      end)
+
       -- the script must return a generator function which create an
       -- insteand of an object with a `start` method.
       local world = script() -- call __init on script
