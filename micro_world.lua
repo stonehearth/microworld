@@ -263,7 +263,7 @@ function MicroWorld:spawn_monster(x, z, npc_player_id, info, role)
 
    local population = stonehearth.population:get_population(npc_player_id)
    radiant.assert(population, 'population %s does not exist!', npc_player_id)
-   local members = game_master_lib.create_citizens(population, monster_info, origin)
+   local members = game_master_lib.create_citizens(population, monster_info, origin, { player_id = npc_player_id })
    if #members == 1 then
       return members[1]
    end
