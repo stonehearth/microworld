@@ -36,7 +36,7 @@ function MicroWorld:create_world(kingdom, biome)
 
    stonehearth.player:add_player(session.player_id)
    stonehearth.player:add_kingdom(session.player_id, kingdom)
-
+   stonehearth.terrain:set_fow_enabled(session.player_id, false)
 
    assert(self._size % 2 == 0)
    local half_size = self._size / 2
@@ -83,6 +83,24 @@ function MicroWorld:place_item_cluster(uri, x, z, w, h, player_id)
       end
    end
 end
+
+function MicroWorld:place_item_list(uri_list, x, z, x_offset, z_offset, player_id, options)
+   for num, uri in pairs(uri_list) do
+      if uri ~= '' then
+         local entity = radiant.entities.create_entity(uri, {owner = player_id})
+         entity = radiant.terrain.place_entity(entity, Point3(x+num*x_offset, 1, z+num*z_offset), options)
+         if player_id then
+            local inventory = stonehearth.inventory:get_inventory(player_id)
+            if inventory and not inventory:contains_item(entity) then
+               inventory:add_item(entity)
+            end
+         end
+      end
+   end
+
+end
+
+
 
 function MicroWorld:place_filled_container(uri, x, y, player_id, container_uri)
    container_uri = container_uri or 'stonehearth:containers:stone_chest'
@@ -245,7 +263,7 @@ function MicroWorld:spawn_monster(x, z, npc_player_id, info, role)
 
    local population = stonehearth.population:get_population(npc_player_id)
    radiant.assert(population, 'population %s does not exist!', npc_player_id)
-   local members = game_master_lib.create_citizens(population, monster_info, origin)
+   local members = game_master_lib.create_citizens(population, monster_info, origin, { player_id = npc_player_id })
    if #members == 1 then
       return members[1]
    end
@@ -365,17 +383,19 @@ function MicroWorld:create_settlement(options, x, z, spacing)
    if type(options) == 'table' then
       for class_name, info in pairs(options) do
          local num = info
-         local attributes, level, levels_array
+         local attributes, level, levels_array, gender, opts
 
          if type(info) == 'table' then
             num = info.num
             attributes = info.attributes
             level = info.level
             levels_array = info.levels
+            gender = info.gender
+            opts = info.options
          end
 
          for i=1, num do
-            local citizen = self:place_citizen(x, y, class_name)
+            local citizen = self:place_citizen(x, y, class_name, gender, opts)
             if attributes then
                for attr, value in pairs(attributes) do
                   radiant.entities.set_attribute(citizen, attr, value)
