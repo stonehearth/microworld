@@ -39,6 +39,9 @@ function BuildingEditor:__init()
                                                  level = 6
                                               }
                                           }, 0, 0)
+                                          
+  
+    self:place_all_furnitures(player_id, -30, 10)                                        
 
 end
 
