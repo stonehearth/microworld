@@ -1,7 +1,7 @@
 {
    "world" : {
-      "size" : 64,
-      "town_position" : { "x": 0, "z": 0 }
+      "size" : 128,
+      "town_position" : { "x": 100, "z": 10 }
    },
    
    "entities" : [
