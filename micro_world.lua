@@ -9,7 +9,7 @@ local Region3 = _radiant.csg.Region3
 
 local log = radiant.log.create_logger('microworld')
 
-function MicroWorld:__init(size)
+function MicroWorld:__init(size, height)
    self._nextTime = 1
    self._running = false
    self._session = {
@@ -20,6 +20,7 @@ function MicroWorld:__init(size)
       size = 32
    end
    self._size = size
+   self._height = height
 end
 
 function MicroWorld:get_session()
@@ -38,6 +39,12 @@ function MicroWorld:create_world(kingdom, biome)
    stonehearth.player:add_kingdom(session.player_id, kingdom)
    stonehearth.terrain:set_fow_enabled(session.player_id, false)
 
+   local height = 10
+   if self._height then 
+      height = self._height
+   end
+
+
    assert(self._size % 2 == 0)
    local half_size = self._size / 2
 
@@ -45,8 +52,8 @@ function MicroWorld:create_world(kingdom, biome)
 
    local region3 = Region3()
    region3:add_cube(Cube3(Point3(0, -2, 0), Point3(self._size, 0, self._size), block_types.bedrock))
-   region3:add_cube(Cube3(Point3(0, 0, 0), Point3(self._size, 9, self._size), block_types.soil_dark))
-   region3:add_cube(Cube3(Point3(0, 9, 0), Point3(self._size, 10, self._size), block_types.grass))
+   region3:add_cube(Cube3(Point3(0, 0, 0), Point3(self._size, height-1, self._size), block_types.soil_dark))
+   region3:add_cube(Cube3(Point3(0, height-1, 0), Point3(self._size, height, self._size), block_types.grass))
    region3 = region3:translated(Point3(-half_size, 0, -half_size))
 
    radiant.terrain.get_terrain_component():add_tile(region3)
