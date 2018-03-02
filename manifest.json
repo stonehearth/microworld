@@ -1,6 +1,8 @@
 {
    "info" :{
       "name" : "Microworld",
+      "namespace": "microworld",
+      "is_debug_mod": true,
       "version" : 3
    },
 
