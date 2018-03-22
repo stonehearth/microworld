@@ -3,6 +3,7 @@
       "name" : "Microworld",
       "namespace": "microworld",
       "is_debug_mod": true,
+      "client_only": true,
       "version" : 3
    },
 
