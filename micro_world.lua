@@ -353,6 +353,8 @@ end
 -- @param spacing - how far each hearthling should spawn from each other
 function MicroWorld:create_settlement(options, x, z, spacing)
    local player_id = self:get_session().player_id
+   local town = stonehearth.town:get_town(player_id)
+   local inventory = stonehearth.inventory:get_inventory(player_id)
    local standard, standard_ghost = stonehearth.player:get_kingdom_banner_style(player_id)
    if not standard then
       standard = 'stonehearth:camp_standard'
@@ -360,8 +362,13 @@ function MicroWorld:create_settlement(options, x, z, spacing)
 
    local banner = radiant.entities.create_entity(standard, { owner = player_id })
    radiant.terrain.place_entity(banner, Point3(8, 1, 8), { force_iconic = false })
-   radiant.terrain.place_entity('stonehearth:decoration:firepit', Point3(8, 1, 5), { owner = player_id, force_iconic = false })
-   stonehearth.town:get_town(player_id):set_banner(banner)
+   inventory:add_item(banner)
+   town:set_banner(banner)
+
+   local hearth_entity = radiant.entities.create_entity('stonehearth:decoration:firepit_hearth', { owner = player_id })
+   radiant.terrain.place_entity(hearth_entity, Point3(8, 1, 5), { force_iconic = false })
+   inventory:add_item(hearth_entity)
+   town:set_hearth(hearth_entity)
 
    local dx = spacing or 3
    local dy = 0
