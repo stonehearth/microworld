@@ -27,13 +27,19 @@ function MicroWorld:get_session()
    return self._session
 end
 
-function MicroWorld:create_world(kingdom, biome)
+function MicroWorld:create_world(kingdom, biome_uri)
    local session = self:get_session()
    if not kingdom then
       kingdom = 'stonehearth:kingdoms:ascendancy'
    end
+   
+   biome_uri = biome_uri or radiant.util.get_config('world_generation.default_biome', 'stonehearth:biome:temperate')
+   stonehearth.world_generation:create_empty_world(biome_uri)
 
-   stonehearth.world_generation:create_empty_world(biome)
+   local biome = radiant.resources.load_json(biome_uri)
+   if biome.default_starting_season then
+      stonehearth.calendar:set_start_day(biome.seasons[biome.default_starting_season].start_day)
+   end
 
    stonehearth.player:add_player(session.player_id)
    stonehearth.player:add_kingdom(session.player_id, kingdom)
