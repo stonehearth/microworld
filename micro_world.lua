@@ -59,6 +59,7 @@ function MicroWorld:create_world(kingdom, biome)
    radiant.terrain.get_terrain_component():add_tile(region3)
 
    stonehearth.hydrology:start()
+   stonehearth.mining:start()
 end
 
 function MicroWorld:at(time, fn)
