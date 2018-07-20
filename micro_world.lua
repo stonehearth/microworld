@@ -58,6 +58,8 @@ function MicroWorld:create_world(kingdom, biome)
 
    radiant.terrain.get_terrain_component():add_tile(region3)
 
+   stonehearth.weather:set_weather_override('stonehearth:weather:test')
+
    stonehearth.hydrology:start()
    stonehearth.mining:start()
 end
