@@ -1,10 +1,11 @@
 {
    "info" :{
-      "name" : "Microworld",
+      "name" : "Microworld for Tests",
       "namespace": "microworld",
       "is_debug_mod": true,
       "client_only": true,
-      "version" : 3
+      "version" : 3,
+      "default_enabled": false
    },
 
    "server_init_script" : "file(micro_world_server)",
