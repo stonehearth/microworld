@@ -138,11 +138,11 @@ function MicroWorld:place_citizen(x, z, job, gender, options)
    radiant.terrain.place_entity(citizen, Point3(x, 1, z), { facing = 180 })
 
    if job_json.parent_level_requirement then
-      job_component:promote_to(job_json.parent_job)
+      job_component:promote_to(job_json.parent_job, { skip_visual_effects = true })
       self:level_up_citizen(citizen, job_json.parent_level_requirement)
    end
 
-   job_component:promote_to(job)
+   job_component:promote_to(job, { skip_visual_effects = true })
 
    if options.clear_traits and citizen:get_component('stonehearth:traits') then
       citizen:get_component('stonehearth:traits'):clear_all_traits()
