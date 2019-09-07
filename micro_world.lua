@@ -484,14 +484,12 @@ function MicroWorld:place_all_entities_passing_filter(player_id, x, z, filter_fn
 
    for uri in pairs(all_entities) do
       if filter_fn(uri) then
-         for i = 1, 4 do
-            -- place the entity into the world
-            self:place_item(uri, x, z, player_id)
-            x = (x + 1) % 8
-            if x == 0 then
-               z = z + 1
-            end
-         end
+        -- place the entity into the world
+        self:place_item(uri, x, z, player_id)
+        x = (x + 1) % 12
+        if x == 0 then
+           z = z + 1
+        end
       end
    end
 end
@@ -506,6 +504,22 @@ local alias_is_equipment = function(uri)
    end
 
    return false
+end
+
+local alias_is_furniture = function(uri)
+   local json = radiant.resources.load_json(uri)
+
+   if json['components'] ~= nil and
+      json['components']['stonehearth:entity_forms'] ~= nil then
+      return true
+   end
+
+   return false
+end
+
+--Place all furnitures in all the relevant mods in the test world
+function MicroWorld:place_all_furnitures(player_id, x, z)
+   self:place_all_entities_passing_filter(player_id, x, z, alias_is_furniture)
 end
 
 --Place all the equipment in all the relevant mods in the test world

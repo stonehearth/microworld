@@ -14,7 +14,6 @@ creates two workers, a stockpile, and some harvestable entities.
 
 For more information about Stonehearth, please visit http://stonehearth.net
 
- 
 
 Installing
 ----------
@@ -74,6 +73,9 @@ run the harvest\_test game world every time you run Stonehearth:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- 
+Running Building Editor Mod
+===========================
+Stonehearth.exe --game.main_mod=microworld --mods.microworld.world=building_editor
+
 
  
